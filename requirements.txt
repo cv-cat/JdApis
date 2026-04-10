@@ -1,0 +1,4 @@
+requests>=2.31.0
+curl_cffi>=0.6.0
+PyExecJS>=1.5.1
+loguru>=0.7.0
