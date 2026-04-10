@@ -42,7 +42,7 @@
 ### 🎯 本地安装
 
 ```bash
-pip install requests curl_cffi execjs loguru
+pip install -r requirements.txt
 npm install
 ```
 
