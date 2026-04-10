@@ -1,0 +1,9 @@
+__pycache__
+node_modules
+.env
+.env.production
+.idea
+test.py
+order.py
+order_test.py
+all_play_urls.txt
