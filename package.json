@@ -1,0 +1,11 @@
+{
+  "name": "jd-platform",
+  "version": "1.0.0",
+  "description": "京东 h5st 签名算法 JS 运行时",
+  "main": "static/JD.js",
+  "dependencies": {
+    "canvas": "^2.11.2",
+    "decimal.js": "^10.4.3",
+    "jsdom": "^25.0.1"
+  }
+}
