@@ -1,4 +1,5 @@
 import json
+import re
 import requests
 from utils.JDUtils import generateParams, generate_h5st
 
@@ -53,6 +54,8 @@ cookies = {
 }
 url = "https://api.m.jd.com/mview/switch"
 sku = '100087543376'
+if not re.fullmatch(r'\d{1,20}', sku):
+    raise ValueError(f"Invalid SKU value: {sku!r}")
 body = generateParams(sku)
 body = json.dumps(body, separators=(',', ':'))
 params = {
@@ -68,7 +71,7 @@ params = {
     "appCode": "ms0ca95114"
 }
 while True:
-    response = requests.get(url, headers=headers, cookies=cookies, params=params)
+    response = requests.get(url, headers=headers, cookies=cookies, params=params, timeout=30)
     res_text = response.text
     print(res_text)
 
