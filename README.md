@@ -59,9 +59,6 @@ npm install
 ```
 JD/
 ├── main.py          # 商品详情请求（mview_switch）
-├── order.py         # 订单列表请求（order_list_m）
-├── order_test.py    # 订单列表测试（完整 URL 直接请求）
-├── test.py          # 京东商品视频批量爬取
 ├── static/
 │   └── JD.js        # h5st 签名算法 JS 实现
 └── utils/
@@ -90,9 +87,11 @@ JD/
 | `sku` | 商品 SKU ID（如 `100087543376`） |
 | `h5st` | 由 `generate_h5st(body)` 自动计算 |
 
-### `order.py` — 订单列表
+`main.py` 里的 cookie / `x-api-eid-token` 需要自己填，仓库里不带登录态。
 
-请求 `https://api.m.jd.com/client.action`，获取当前账号的订单列表（`functionId=order_list_m`）。
+### 订单列表
+
+请求 `https://api.m.jd.com/client.action`，`functionId=order_list_m`。这部分示例没有放进仓库。
 
 **关键参数**
 
@@ -102,17 +101,7 @@ JD/
 | `pageSize` | 每页条数，默认 `10` |
 | `h5st` | 由 `generate_h5st(body)` 自动计算 |
 
-### `test.py` — 视频爬取
-
-批量遍历京东视频 VID，调用 `https://api.m.jd.com/tencent/video_v3` 接口，筛选出符合分辨率要求的视频播放地址，结果写入 `all_play_urls.txt`。
-
-```python
-# 示例：从 VID 2107007690 往前批量爬取
-start = 2107007690
-end = 0
-for vid in range(start, end, -1):
-    res_json = get_one_video_info(vid, cookie_str)
-```
+视频 VID 批量拉取的示例脚本也没放进仓库。
 
 ## 🍥 日志
 
