@@ -3,7 +3,36 @@ node_modules
 .env
 .env.production
 .idea
-test.py
-order.py
-order_test.py
+.vscode
+
+# 登录态与运行产物
+jd_cookies.json
+jd_cookies*.json
+auth.json
+auth.json.tmp
+.env
+.env.*
+!.env.example
+cookies.txt
+*.har
+*.pcap
+*.pcapng
+*.log
+qrcode.png
+datas/
+static/fp_seed.json
+my_goal.md
+
+# 临时脚本与调试产物
+_scratch*
+*.log
+*.pyc
+.pytest_cache/
 all_play_urls.txt
+
+# 本地调试与抓包产物
+.jd-login-profile-*/
+tmp-*.network-response
+*.network-request
+chrome-behavior-decoded.txt
+qr-current.png
