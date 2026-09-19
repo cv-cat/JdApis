@@ -1,11 +1,11 @@
 {
-  "name": "jd-platform",
-  "version": "1.0.0",
-  "description": "京东 h5st 签名算法 JS 运行时",
-  "main": "static/JD.js",
+  "name": "jd-apis",
+  "version": "2.0.0",
+  "description": "JdApis 的 h5st、设备参数与 JCAP 本地运行时",
+  "main": "static/h5st5_server.js",
+  "private": true,
   "dependencies": {
-    "canvas": "^2.11.2",
-    "decimal.js": "^10.4.3",
+    "@napi-rs/canvas": "^0.1.80",
     "jsdom": "^25.0.1"
   }
 }

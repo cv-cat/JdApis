@@ -1,148 +1,182 @@
 <div align="center">
-    <a href="https://www.python.org/">
-        <img src="https://img.shields.io/badge/python-3.10%2B-blue" alt="Python 3.10+">
+  <p>
+    <a href="https://github.com/cv-cat/JdApis">
+      <img width="360" src="./author/logo.png" alt="JdApis logo">
     </a>
-    <a href="https://nodejs.org/zh-cn/">
-        <img src="https://img.shields.io/badge/nodejs-20%2B-green" alt="NodeJS 20+">
-    </a>
+  </p>
+  <p>
+    <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.10%2B-blue" alt="Python 3.10+"></a>
+    <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node.js-20%2B-green" alt="Node.js 20+"></a>
+    <a href="https://github.com/cv-cat/JdApis"><img src="https://img.shields.io/badge/browser-not_required-brightgreen" alt="No browser required"></a>
+  </p>
+
+  # 🛒 JdApis
+
+  **京东 PC 登录、商品搜索与咚咚接口的纯程序实现**
 </div>
 
-# 🛒 JD Platform
+JdApis 把京东网页端的登录、设备参数、请求签名和商品接口封装成可以直接调用的 Python API。
 
-**✨ 京东数据采集解决方案，支持商品详情、订单列表与视频资源抓取**
+扫码登录、手机号登录、短信验证、人机验证、h5st 签名和搜索请求都在程序内完成，不依赖 Selenium、Playwright 或常驻浏览器。
 
-当你需要让 AI Agent 感知京东商品生态——自动采集商品信息、订单数据、视频资源——第一道墙往往不是模型能力，而是**平台签名鉴权能力的缺失**。
+> 本项目仅用于学习、研究和合法的个人自动化。请遵守京东平台规则，控制请求频率，不要提交或传播 Cookie、手机号、验证码等隐私数据。
 
-本项目做的事很简单：把这道墙拆掉。
+## ✨ 功能特性
 
-**⚠️ 严禁用于爬取用户隐私、违规商业用途！本项目仅供学习与技术研究使用，后果自负。**
+- 🔐 **纯程序登录**
+  - 京东 App 扫码登录，自动轮询并获取 `thor/pin`
+  - 手机号登录，自动处理 JCAP、人机验证和额外安全短信
+  - 登录态保存到系统用户目录，不写入 Git 工作区
+- 🧩 **网页参数本地复现**
+  - h5st 5.3 / tk03 签名
+  - PC 设备票据、WebM 指纹和 JCAP 本地运行时
+  - `curl_cffi` Chrome TLS/HTTP2 传输指纹
+- 🛍️ **商品接口**
+  - 商品搜索、详情、评论、相关搜索
+  - 购物车、浏览历史、关注商品和订单列表
+  - 搜索热词、联想词和会员权益
+- 💬 **咚咚 WebSocket**
+  - 会话初始化、心跳、消息接收和文本发送
+- 🧱 **会话持久化**
+  - 响应链上的 `Set-Cookie` 自动合并并原子落盘
+  - 不按 Cookie 名称做白名单过滤，适配服务端轮换票据
 
-## 🌟 功能特性
+## 🚀 快速开始
 
-- ✅ **h5st 签名自动计算**
-  - 内嵌 JS 运行时（`execjs`），自动生成京东 `h5st` 鉴权参数
-  - 适配京东最新 `h5st 4.2` 接口鉴权协议
-- 🛍️ **商品详情采集**
-  - 支持通过 SKU ID 获取商品详情（`mview_switch`）
-  - 自动生成 `generateParams` 请求体与签名
-- 📦 **订单列表采集**
-  - 支持获取京东个人订单列表（`order_list_m`）
-  - 基于 `curl_cffi` 模拟真实浏览器指纹请求
-- 🎬 **视频资源爬取**
-  - 支持按 VID 批量爬取京东商品视频信息（腾讯视频接口）
-  - 自动筛选 1920×1080 / 1080×1920 规格视频播放地址
-
-## 🛠️ 快速开始
-
-### ⛳ 运行环境
+### 运行环境
 
 - Python 3.10+
 - Node.js 20+
+- Windows、Linux 或 macOS
 
-### 🎯 本地安装
+### 安装依赖
 
 ```bash
 pip install -r requirements.txt
 npm install
 ```
 
-### 🎨 Cookie 配置
+### 一键扫码搜索
 
-在浏览器中打开 [www.jd.com](https://www.jd.com)，**登录账号**后按 `F12` 打开开发者工具，点击「网络」→ 找任意一个 API 请求 → 复制请求头中的 `Cookie` 字段值。
+直接运行 Quick Demo：
 
-> ⚠️ 注意：必须登录后获取的 Cookie 才有效，`pt_key` / `pt_pin` 字段用于身份认证，缺失将导致请求失败。
+```bash
+python quick.py
+```
 
-将获取到的 Cookie 字符串填入对应脚本的 `cookies` 字典中。
+程序会：
+
+1. 检查本地登录态；没有有效会话时生成 `qrcode.png`，并用系统图片查看器打开。
+2. 使用京东 App 扫码并确认登录。
+3. 提示输入搜索关键词，直接输出前 10 个商品。
+
+默认搜索关键词是 `电脑`，回车即可使用。登录态有效时会复用现有会话，不会重复扫码；想重新扫码时删除系统 auth 文件或设置新的 `JDAPIS_AUTH_FILE`。
+
+### 分步使用
+
+扫码或手机号登录：
+
+```bash
+python login_demo.py
+```
+
+编辑 `login_demo.py` 顶部的 `LOGIN_MODE`：
+
+```python
+LOGIN_MODE = "qr"   # 京东 App 扫码
+# LOGIN_MODE = "sms"  # 手机号 + 短信
+```
+
+登录后运行商品示例：
+
+```bash
+python main.py
+```
+
+关键词和示例 SKU 都在文件顶部，保持直接修改变量的风格，不使用命令行参数解析。
+
+## 🧑‍💻 代码调用
+
+```python
+from jd_apis.jd_api import JdAPI
+from utils.common_util import init
+
+auth, _ = init()
+
+alive, account = JdAPI.check_session(auth)
+if not alive:
+    raise RuntimeError("请先运行 python login_demo.py")
+
+total, wares = JdAPI.search_wares(auth, "机械键盘", page=1)
+print(total, wares[:3])
+```
+
+常用方法：
+
+| 模块 | 方法 | 用途 |
+| --- | --- | --- |
+| `JdLoginAPI` | `qr_login(auth)` | 纯程序扫码登录 |
+| `JdSmsLoginAPI` | `login(auth, mobile, code_provider)` | 手机号与短信登录 |
+| `JdAPI` | `search_wares(auth, keyword)` | 搜索并提取商品列表 |
+| `JdAPI` | `get_product_detail(auth, sku)` | 商品详情 |
+| `JdAPI` | `get_product_comments(auth, sku)` | 商品评论 |
+| `JdAPI` | `get_cart_num(auth)` | 购物车数量 |
+| `JdAPI` | `get_order_list(auth)` | 订单列表 |
+| `JdChatWS` | `start()` / `send_text()` | 咚咚消息收发 |
+
+## 🔒 登录态与隐私
+
+默认登录态位置：
+
+```text
+Windows: %LOCALAPPDATA%\JdApis\auth.json
+Linux:   ~/.local/state/JdApis/auth.json
+macOS:   ~/Library/Application Support/JdApis/auth.json
+```
+
+可以通过环境变量覆盖：
+
+```text
+JDAPIS_AUTH_FILE=D:\private\JdApis\auth.json
+```
+
+不要把这个文件放进仓库。`.gitignore` 已忽略 Cookie、`.env`、二维码、抓包文件、运行日志和本地指纹种子。
+
+如果已有 Cookie，也可以复制 `.env.example` 为 `.env` 并填写 `JD_COOKIES`；更推荐运行 `quick.py` 或 `login_demo.py` 让程序自己建立会话。
 
 ## 📁 项目结构
 
-```
-JD/
-├── main.py          # 商品详情请求（mview_switch）
-├── order.py         # 订单列表请求（order_list_m）
-├── order_test.py    # 订单列表测试（完整 URL 直接请求）
-├── test.py          # 京东商品视频批量爬取
-├── static/
-│   └── JD.js        # h5st 签名算法 JS 实现
-└── utils/
-    └── JDUtils.py   # Python 封装，调用 JD.js 生成签名
-```
-
-## 📡 核心模块说明
-
-### `utils/JDUtils.py`
-
-通过 `execjs` 调用 `static/JD.js` 提供两个核心函数：
-
-| 函数 | 说明 |
-|------|------|
-| `generate_h5st(body)` | 根据请求体生成 `h5st` 签名参数 |
-| `generateParams(sku)` | 根据 SKU ID 生成商品详情请求体 |
-
-### `main.py` — 商品详情
-
-请求 `https://api.m.jd.com/mview/switch`，获取指定 SKU 的商品详情数据。
-
-**关键参数**
-
-| 参数 | 说明 |
-|------|------|
-| `sku` | 商品 SKU ID（如 `100087543376`） |
-| `h5st` | 由 `generate_h5st(body)` 自动计算 |
-
-### `order.py` — 订单列表
-
-请求 `https://api.m.jd.com/client.action`，获取当前账号的订单列表（`functionId=order_list_m`）。
-
-**关键参数**
-
-| 参数 | 说明 |
-|------|------|
-| `page` | 订单列表页码，从 `1` 开始 |
-| `pageSize` | 每页条数，默认 `10` |
-| `h5st` | 由 `generate_h5st(body)` 自动计算 |
-
-### `test.py` — 视频爬取
-
-批量遍历京东视频 VID，调用 `https://api.m.jd.com/tencent/video_v3` 接口，筛选出符合分辨率要求的视频播放地址，结果写入 `all_play_urls.txt`。
-
-```python
-# 示例：从 VID 2107007690 往前批量爬取
-start = 2107007690
-end = 0
-for vid in range(start, end, -1):
-    res_json = get_one_video_info(vid, cookie_str)
+```text
+JdApis/
+├── quick.py                # 扫码登录 + 搜索的最短体验入口
+├── login_demo.py           # 扫码 / 手机号登录
+├── main.py                 # 商品 API 体验入口
+├── chat_demo.py            # 咚咚 WebSocket 示例
+├── builder/                # Cookie、Header、参数装配
+├── jd_apis/                # 登录、商品与聊天 API
+├── utils/                  # h5st、设备参数、HTTP 与会话工具
+├── static/                 # 官方 JS/WASM 运行时与 JCAP 模型
+├── author/logo.png         # 项目标识
+├── requirements.txt
+└── package.json
 ```
 
-## 🍥 日志
+`static/jcap/run/models/` 下的 ONNX 文件是本地验证码识别运行时的一部分，不能随意删除。二维码、Cookie、日志和分析报告不属于运行时文件，均不会进入公开提交。
 
-| 日期       | 说明                                      |
-|----------|-------------------------------------------|
-| 26/04/10 | 项目初始化，完成 h5st 签名、商品详情、订单列表、视频爬取模块 |
+## 🗝️ 使用提示
 
-## 🤝 欢迎贡献 PR
+- 登录成功不代表票据永久有效；每次业务请求前可以先调用 `JdAPI.check_session(auth)`。
+- 京东会根据账号、设备和请求频率触发风控。遇到 403/605 时先降低频率，再确认登录态。
+- JCAP 首次加载模型需要一些时间，程序会把验证状态放在脱敏的 `_verification` 字段中。
+- h5st、设备画像和 WebM 使用同一套版本画像；网页更新后如果接口整体变化，请同步更新本地运行时。
+- 不要提交 `auth.json`、Cookie、手机号、短信验证码、抓包文件或任何个人数据。
 
-本项目欢迎任何形式的贡献！如果你有新功能想法、Bug 修复或文档改进，欢迎提交 PR。
+## 🤝 贡献
 
-- Fork 本仓库并在新分支上开发
-- 保持代码风格与现有代码一致
-- PR 描述中请简要说明改动内容和目的
-- 也欢迎通过 Issue 提出建议或报告问题
+欢迎提交 Issue 和 Pull Request：
 
-## 🧸 额外说明
-1. 感谢 star⭐ 和 follow📰！不时更新
-2. 作者的联系方式在主页里，有问题可以随时联系我
-3. 可以关注下作者的其他项目，欢迎 PR 和 issue
-4. 感谢赞助！如果此项目对您有帮助，请作者喝一杯奶茶~~ （开心一整天😊😊）
-5. thank you~~~
+- 描述网页版本、接口名称和可复现的响应现象
+- 不要上传登录态、验证码、抓包票据或本地路径
+- 保持 `builder` / `jd_apis` / `utils` 的分层结构
 
-
-## 🍔 交流群
-
-如果你对爬虫和 AI Agent 感兴趣，可以加入群聊一起讨论~
-
-ps: 请加群，人满或者过期 issue | wx 提醒 | qq提醒
-
-| group-1 | group-2 | group-3 | group-4 (2000人qq群) |
-|:--:|:--:|:--:|:--:|
-| <img width="280" alt="group1" src="https://cvcat.site/assets/group1.jpg" /> | <img width="280" alt="group2" src="https://cvcat.site/assets/group2.jpg" /> | <img width="280" alt="group3" src="https://cvcat.site/assets/group3.jpg" /> | <img width="280" alt="group3" src="https://cvcat.site/assets/group4.jpg" /> |
+如果这个项目对你有帮助，欢迎点一个 Star ⭐

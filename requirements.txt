@@ -1,4 +1,12 @@
 requests>=2.31.0
 curl_cffi>=0.6.0
-PyExecJS>=1.5.1
+websocket-client>=1.7.0
+python-dotenv>=1.0.0
 loguru>=0.7.0
+gmssl>=3.2.2
+pycryptodome>=3.20.0
+numpy>=1.26.0
+opencv-python-headless>=4.9.0
+onnxruntime>=1.17.0
+scipy>=1.12.0
+scikit-image>=0.22.0
