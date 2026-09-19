@@ -157,11 +157,13 @@ JdApis/
 ├── utils/                  # h5st、设备参数、HTTP 与会话工具
 ├── static/                 # 官方 JS/WASM 运行时与 JCAP 模型
 ├── author/logo.png         # 项目标识
+├── author/wx_pay.png       # 微信赞赏码
+├── author/zfb_pay.jpg      # 支付宝收款码
 ├── requirements.txt
 └── package.json
 ```
 
-`static/jcap/run/models/` 下的 ONNX 文件是本地验证码识别运行时的一部分，不能随意删除。二维码、Cookie、日志和分析报告不属于运行时文件，均不会进入公开提交。
+`static/jcap/run/models/` 下的 ONNX 文件是本地验证码识别运行时的一部分，不能随意删除。登录二维码、Cookie、日志和分析报告不属于公开资源，均不会进入提交；`author/` 下的赞赏码仅用于项目支持。
 
 ## 🗝️ 使用提示
 
@@ -180,3 +182,22 @@ JdApis/
 - 保持 `builder` / `jd_apis` / `utils` 的分层结构
 
 如果这个项目对你有帮助，欢迎点一个 Star ⭐
+
+## 💖 支持项目
+
+如果 JdApis 对你有帮助，欢迎给作者买杯咖啡或奶茶，感谢每一份支持！
+
+<div align="center">
+  <img src="./author/wx_pay.png" width="360" alt="微信赞赏码"> 
+  <img src="./author/zfb_pay.jpg" width="360" alt="支付宝收款码">
+</div>
+
+## 📈 Star 趋势
+
+<a href="https://cvcat.site/star-history/svg?repos=cv-cat/JdApis&type=Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://cvcat.site/star-history/svg?repos=cv-cat/JdApis&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://cvcat.site/star-history/svg?repos=cv-cat/JdApis&type=Date" />
+    <img alt="Star History Chart" src="https://cvcat.site/star-history/svg?repos=cv-cat/JdApis&type=Date" />
+  </picture>
+</a>
